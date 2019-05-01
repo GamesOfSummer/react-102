@@ -6,6 +6,7 @@ export default class ControlledInput extends Component {
 
         this.state = {
             inputValue: '',
+            message: '',
             violations: []
         };
 
@@ -29,6 +30,12 @@ export default class ControlledInput extends Component {
             })
             .then(data => {
                 this.setState({ violations: data.infractions });
+
+                if (data.infractions.length === 0) {
+                    this.message = 'Sorry, no records returned!';
+                } else {
+                    this.message = '';
+                }
             });
     };
 
@@ -42,6 +49,7 @@ export default class ControlledInput extends Component {
                 />
                 <br />
                 <button onClick={this.handleClick}>Search</button>
+                {this.message}
                 <ul>
                     {this.state.violations.map(item => {
                         return (
