@@ -5,20 +5,26 @@ export default class ControlledInput extends Component {
         super();
 
         this.state = {
-            foods: ['b', 'd', 'cats'],
+            inputValue: '',
 
-            people: [
-                { id: 1, name: 'Bob', age: '35' },
-                { id: 2, name: 'Bobby', age: '15' }
-            ],
-
-            inputValue: ''
+            violations2: []
         };
     }
 
     handleChange = evt => {
         this.setState({ inputValue: evt.target.value });
     };
+
+    componentDidMount() {
+        fetch('http://cpsc-api.herokuapp.com/api')
+            .then(resp => {
+                return resp.json();
+            })
+            .then(data => {
+                console.log('data?', data);
+                this.setState({ violations2: data.violations });
+            });
+    }
 
     render() {
         return (
@@ -28,6 +34,16 @@ export default class ControlledInput extends Component {
                     value={this.state.inputValue}
                     onChange={this.handleChange}
                 />
+                <br />
+                <ul>
+                    {this.state.violations2.map(item => {
+                        return (
+                            <li>
+                                {item.date} -> {item.product}
+                            </li>
+                        );
+                    })}
+                </ul>
             </div>
         );
     }

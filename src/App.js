@@ -7,7 +7,6 @@ function App() {
     return (
         <div className="App">
             <ControlledInput />
-            <Lister />
         </div>
     );
 }
