@@ -6,25 +6,31 @@ export default class ControlledInput extends Component {
 
         this.state = {
             inputValue: '',
-
-            violations2: []
+            violations: []
         };
+
+        this.handleClick = this.handleClick.bind(this);
     }
 
     handleChange = evt => {
         this.setState({ inputValue: evt.target.value });
     };
 
-    componentDidMount() {
-        fetch('http://cpsc-api.herokuapp.com/api')
+    handleClick = evt => {
+        evt.preventDefault();
+        console.log('The link was clicked.');
+
+        fetch(
+            'http://cpsc-api.herokuapp.com/api/search?q=' +
+                this.state.inputValue
+        )
             .then(resp => {
                 return resp.json();
             })
             .then(data => {
-                console.log('data?', data);
-                this.setState({ violations2: data.violations });
+                this.setState({ violations: data.infractions });
             });
-    }
+    };
 
     render() {
         return (
@@ -35,11 +41,12 @@ export default class ControlledInput extends Component {
                     onChange={this.handleChange}
                 />
                 <br />
+                <button onClick={this.handleClick}>Search</button>
                 <ul>
-                    {this.state.violations2.map(item => {
+                    {this.state.violations.map(item => {
                         return (
                             <li>
-                                {item.date} -> {item.product}
+                                {item.date} - {item.violation} - {item.product}
                             </li>
                         );
                     })}
