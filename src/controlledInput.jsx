@@ -30,26 +30,16 @@ export default class ControlledInput extends Component {
             })
             .then(data => {
                 this.setState({ violations: data.infractions });
-
-                if (data.infractions.length === 0) {
-                    this.message = 'Sorry, no records returned!';
-                } else {
-                    this.message = '';
-                }
             });
     };
 
     render() {
-        return (
-            <div>
-                Input
-                <input
-                    value={this.state.inputValue}
-                    onChange={this.handleChange}
-                />
-                <br />
-                <button onClick={this.handleClick}>Search</button>
-                {this.message}
+        let message;
+
+        if (this.state.violations.length === 0) {
+            message = 'No records';
+        } else {
+            message = (
                 <ul>
                     {this.state.violations.map(item => {
                         return (
@@ -59,6 +49,20 @@ export default class ControlledInput extends Component {
                         );
                     })}
                 </ul>
+            );
+        }
+
+        return (
+            <div>
+                Input
+                <input
+                    value={this.state.inputValue}
+                    onChange={this.handleChange}
+                />
+                <br />
+                <button onClick={this.handleClick}>Search</button>
+                <br />
+                {message}
             </div>
         );
     }
